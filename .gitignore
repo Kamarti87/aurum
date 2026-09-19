@@ -39,3 +39,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# npm-кэш пользователя aurum на сервере (его домашняя папка — сам проект)
+/.npm/

@@ -2,9 +2,9 @@
 
 /**
  * Канонический адрес сайта — для robots.txt, карты сайта и разметки.
- * Домен ещё не выбран: пока адрес берётся из SITE_URL, а без неё — локальный.
+ * Берётся из SITE_URL при сборке; без неё — боевой адрес aurum-msk.ru.
  */
-export const SITE_URL = (process.env.SITE_URL ?? "http://localhost:3002").replace(/\/$/, "");
+export const SITE_URL = (process.env.SITE_URL ?? "https://aurum-msk.ru").replace(/\/$/, "");
 
 /** Имя сайта без протокола — для подписи в заявках. */
 export const SITE_HOST = new URL(SITE_URL).host;

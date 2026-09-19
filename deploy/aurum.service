@@ -1,0 +1,26 @@
+# /etc/systemd/system/aurum.service — сайт aurum-msk.ru
+[Unit]
+Description=Сайт aurum-msk.ru (Next.js)
+After=network.target
+
+[Service]
+Type=simple
+User=aurum
+Group=aurum
+WorkingDirectory=/srv/aurum
+Environment=NODE_ENV=production
+# SITE_URL, ALLOW_INDEXING и каналы заявок (MAX_*, SMTP_*, MAIL_TO)
+EnvironmentFile=/etc/aurum/aurum.env
+ExecStart=/usr/bin/node /srv/aurum/node_modules/next/dist/bin/next start -p 3002 -H 127.0.0.1
+Restart=on-failure
+RestartSec=5
+
+# те же ограничения, что у altera-prime и milky-bar
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectHome=true
+ProtectSystem=strict
+ReadWritePaths=/srv/aurum/.next
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,27 @@
+# Дописывается в /etc/caddy/Caddyfile (перед правкой — резервная копия).
+aurum-msk.ru {
+	encode zstd gzip
+	# до запуска закрыто от поисковиков; заголовок накрывает и картинки
+	header X-Robots-Tag "noindex, nofollow, noarchive"
+	reverse_proxy 127.0.0.1:3002
+	log {
+		output file /var/log/caddy/aurum-access.log {
+			roll_size 10MiB
+			roll_keep 5
+		}
+		# журнал нужен только чтобы видеть роботов: IP и cookie не храним
+		format filter {
+			fields {
+				request>remote_ip delete
+				request>client_ip delete
+				request>remote_port delete
+				request>headers>Cookie delete
+			}
+			wrap json
+		}
+	}
+}
+
+www.aurum-msk.ru {
+	redir https://aurum-msk.ru{uri} permanent
+}

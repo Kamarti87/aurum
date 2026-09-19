@@ -42,7 +42,7 @@ npx next dev -p 3002
 
 | Переменная | Что это |
 | --- | --- |
-| `SITE_URL` | адрес сайта, например `https://aurum.ru`; без неё — `http://localhost:3002` |
+| `SITE_URL` | адрес сайта; без неё — `https://aurum-msk.ru` |
 | `ALLOW_INDEXING` | `true` открывает сайт поисковикам; по умолчанию закрыт |
 | `MAX_BOT_TOKEN`, `MAX_CHAT_ID` | бот MAX для заявок, как на altprime.ru |
 | `SMTP_USER`, `SMTP_PASSWORD`, `MAIL_TO` | дубль заявки письмом (Яндекс Почта, пароль приложения) |
@@ -53,10 +53,30 @@ npx next dev -p 3002
 
 ## До запуска
 
-- купить домен и прописать его в `SITE_URL`;
 - завести бота или почту для заявок, счётчик Метрики;
 - уточнить часы работы (сейчас Пн–Пт 9–18, как у altprime.ru);
 - когда появится карточка на Яндекс Картах и профиль в MAX — вписать в `contacts.ts`.
 
 Поисковикам сайт закрыт тремя замками: `robots.txt` с `Disallow: /`, мета `noindex`
 и (на сервере) заголовок `X-Robots-Tag` в Caddy. Открывать — все три сразу.
+
+## Выкладка
+
+Домен — **aurum-msk.ru**, сервер тот же, что у altprime.ru и milkybar.ru (`ssh altprime`).
+Сайт живёт в `/srv/aurum` от пользователя `aurum`, сервис `aurum.service` слушает
+`127.0.0.1:3002`, наружу его отдаёт Caddy. Файлы настройки лежат в `deploy/`:
+
+| Файл | Куда на сервере |
+| --- | --- |
+| `deploy/setup.sh` | разовая подготовка: пользователь, ключ, env, клон репозитория |
+| `deploy/aurum.service` | `/etc/systemd/system/aurum.service` |
+| `deploy/aurum-deploy` | `/usr/local/bin/aurum-deploy` |
+| `deploy/Caddyfile.aurum` | дописывается в `/etc/caddy/Caddyfile` |
+| `deploy/aurum.env.example` | образец `/etc/aurum/aurum.env` |
+
+Обычная выкатка:
+
+```bash
+git push
+ssh altprime /usr/local/bin/aurum-deploy
+```
