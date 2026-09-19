@@ -1,0 +1,415 @@
+@import "tailwindcss";
+
+@theme {
+  /* Светлая тема «Бумага»: имена токенов прежние, чтобы секции не переписывать.
+     ink — поверхности от фона страницы к рамкам, mist — текст от приглушённого
+     к основному, fg — самый контрастный текст (заголовки, цифры). */
+  --color-ink-950: #f6f2ea;
+  --color-ink-900: #efe9de;
+  --color-ink-850: #fbf9f4;
+  --color-ink-800: #fffdf9;
+  --color-ink-750: #ebe4d7;
+  --color-ink-700: #e3dacb;
+  --color-ink-600: #d2c6b1;
+  --color-mist-500: #8a806f;
+  --color-mist-400: #6b6254;
+  --color-mist-300: #50493e;
+  --color-mist-200: #3b352c;
+  --color-mist-100: #231f19;
+  --color-fg: #17140f;
+
+  /* Золото на светлом темнее, чем на тёмном: иначе текст не читается */
+  --color-accent: #b8913c;
+  --color-accent-strong: #c9a24b;
+  --color-accent-deep: #7f601f;
+  --color-accent-soft: #8e6a22;
+  --color-ok: #2f8a57;
+
+  /* Мягкие скругления: карточки 24px, кнопки — «таблетки» */
+  --radius-lg: 10px;
+  --radius-xl: 14px;
+  --radius-2xl: 20px;
+  --radius-3xl: 28px;
+
+  --font-display: var(--font-playfair), ui-serif, Georgia, serif;
+  --font-sans: var(--font-onest), ui-sans-serif, system-ui, sans-serif;
+}
+
+/* Тёмная полоса: лента, заявка и подвал. Утилиты Tailwind читают цвета
+   из переменных, поэтому внутри .theme-dark те же классы дают тёмный вид. */
+.theme-dark {
+  --color-ink-950: #12100c;
+  --color-ink-900: #17140f;
+  --color-ink-850: #1c1914;
+  --color-ink-800: #211d17;
+  --color-ink-750: #28231c;
+  --color-ink-700: #332d24;
+  --color-ink-600: #463e32;
+  --color-mist-500: #8f8574;
+  --color-mist-400: #a89e8c;
+  --color-mist-300: #c2b8a6;
+  --color-mist-200: #ddd4c5;
+  --color-mist-100: #f1ebe0;
+  --color-fg: #ffffff;
+  --color-accent-soft: #e3c88a;
+  --color-ok: #7fc99a;
+  background-color: var(--color-ink-950);
+  color: var(--color-mist-200);
+}
+
+@layer base {
+  * {
+    border-color: color-mix(in oklab, var(--color-ink-600) 60%, transparent);
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    background-color: var(--color-ink-950);
+    color: var(--color-mist-200);
+    font-family: var(--font-sans);
+    overflow-x: hidden;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    color: var(--color-fg);
+    letter-spacing: -0.015em;
+  }
+
+  ::selection {
+    background: color-mix(in oklab, var(--color-accent) 35%, transparent);
+    color: var(--color-fg);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+}
+
+/* Компонентные классы живут в слое components, чтобы утилиты Tailwind
+   (hidden, flex, mt-auto и т.д.) могли их переопределять. */
+@layer components {
+  /* ---------- Фоновые эффекты ---------- */
+
+  .bg-grid {
+    background-image: radial-gradient(
+      color-mix(in oklab, var(--color-mist-500) 30%, transparent) 1px,
+      transparent 1.4px
+    );
+    background-size: 26px 26px;
+  }
+
+  .mask-fade {
+    mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 30%, transparent 78%);
+  }
+
+  /* Мягкое свечение рисуем радиальным градиентом, а не filter: blur().
+     Размытие в 90 пикселей заставляло браузер пересчитывать огромную область
+     на каждом кадре и сбивало анимацию техники. Цвет берётся из currentColor,
+     поэтому в разметке нужен text-accent/N, а не bg-accent/N. */
+  .orb {
+    position: absolute;
+    border-radius: 9999px;
+    background-image: radial-gradient(closest-side, currentColor, transparent 72%);
+    pointer-events: none;
+  }
+
+  /* ---------- Поверхности ---------- */
+
+  .card {
+    position: relative;
+    border-radius: 24px;
+    border: 1px solid color-mix(in oklab, var(--color-ink-600) 55%, transparent);
+    background: var(--color-ink-800);
+    box-shadow:
+      0 1px 0 0 color-mix(in oklab, #fff 70%, transparent) inset,
+      0 18px 40px -32px rgba(70, 52, 20, 0.45);
+    transition:
+      transform 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+      border-color 0.4s ease,
+      box-shadow 0.4s ease;
+  }
+
+  .theme-dark .card {
+    background: linear-gradient(
+      180deg,
+      color-mix(in oklab, var(--color-ink-800) 92%, transparent),
+      color-mix(in oklab, var(--color-ink-900) 96%, transparent)
+    );
+    box-shadow: none;
+  }
+
+  .card-hover:hover {
+    transform: translateY(-4px);
+    border-color: color-mix(in oklab, var(--color-accent) 50%, transparent);
+    box-shadow: 0 30px 60px -34px rgba(70, 52, 20, 0.55);
+  }
+
+  .card-sheen::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(
+      140deg,
+      color-mix(in oklab, var(--color-accent-strong) 30%, transparent),
+      transparent 34%
+    );
+    -webkit-mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+
+  /* ---------- Текст ---------- */
+
+  .text-hl {
+    font-style: italic;
+    font-weight: 500;
+    color: var(--color-accent-strong);
+    background: linear-gradient(
+      100deg,
+      var(--color-accent-strong) 0%,
+      var(--color-accent) 45%,
+      var(--color-accent-deep) 100%
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    /* курсив выходит за рамку строки — чтобы градиент не обрезал хвост буквы */
+    padding-right: 0.08em;
+  }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    border-radius: 9999px;
+    border: 1px solid color-mix(in oklab, var(--color-accent) 40%, transparent);
+    background: color-mix(in oklab, var(--color-accent) 9%, transparent);
+    padding: 0.4rem 0.9rem 0.4rem 0.75rem;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--color-accent-soft);
+  }
+
+  .eyebrow::before {
+    content: "";
+    width: 6px;
+    height: 6px;
+    border-radius: 9999px;
+    background: var(--color-accent);
+    box-shadow: 0 0 0 3px color-mix(in oklab, var(--color-accent) 22%, transparent);
+  }
+
+  /* ---------- Кнопки ---------- */
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border: 1px solid transparent;
+    border-radius: 9999px;
+    padding: 0.95rem 1.6rem;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: -0.005em;
+    white-space: nowrap;
+    transition:
+      background-color 0.16s ease,
+      border-color 0.16s ease,
+      color 0.16s ease,
+      box-shadow 0.16s ease,
+      transform 0.1s ease;
+  }
+
+  .btn:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+  }
+
+  /* Основное действие: почти чёрная кнопка со светлой надписью — на бумажном
+     фоне она заметнее золота. Золото появляется на наведении. */
+  .btn-primary {
+    color: #fbf8f1;
+    background-color: #17140f;
+    border-color: #17140f;
+    box-shadow: 0 12px 26px -16px rgba(23, 20, 15, 0.8);
+  }
+
+  .btn-primary:hover {
+    color: #17140f;
+    background-color: var(--color-accent-strong);
+    border-color: var(--color-accent);
+  }
+
+  .btn-primary:active {
+    transform: translateY(1px);
+    box-shadow: none;
+  }
+
+  /* в тёмной полосе основная кнопка — золотая */
+  .theme-dark .btn-primary {
+    color: #17140f;
+    background-color: var(--color-accent-strong);
+    border-color: var(--color-accent);
+  }
+
+  .theme-dark .btn-primary:hover {
+    background-color: #e0bd6a;
+  }
+
+  .btn-ghost {
+    color: var(--color-fg);
+    background-color: color-mix(in oklab, var(--color-ink-800) 70%, transparent);
+    border-color: color-mix(in oklab, var(--color-ink-600) 90%, transparent);
+  }
+
+  .btn-ghost:hover {
+    background-color: var(--color-ink-800);
+    border-color: var(--color-accent);
+  }
+
+  .btn-ghost:active {
+    transform: translateY(1px);
+  }
+
+  /* ---------- Появление при скролле ---------- */
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(22px);
+    transition:
+      opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+      transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+    will-change: opacity, transform;
+  }
+
+  .reveal.is-visible {
+    opacity: 1;
+    transform: none;
+    /* подсказка нужна только на время анимации: постоянная у полусотни блоков
+       держит лишние слои в памяти */
+    will-change: auto;
+  }
+
+  /* ---------- Анимации техники ---------- */
+
+  /* Парящие элементы выносим на отдельный слой композитора. Без этого браузер
+     округляет положение до целого пикселя, и очень медленное движение идёт
+     заметными ступеньками вместо плавного скольжения. */
+  .animate-float-slow,
+  .animate-float-soft,
+  .animate-marquee {
+    will-change: transform;
+    backface-visibility: hidden;
+  }
+
+  .animate-float-slow {
+    animation: float-slow 5.5s ease-in-out infinite;
+  }
+
+  .animate-float-soft {
+    animation: float-soft 4.8s ease-in-out infinite;
+  }
+
+  .animate-marquee {
+    animation: marquee 38s linear infinite;
+  }
+
+  /* ---------- Поля формы ---------- */
+
+  .field {
+    width: 100%;
+    border-radius: 12px;
+    border: 1px solid color-mix(in oklab, var(--color-ink-600) 85%, transparent);
+    background: color-mix(in oklab, var(--color-ink-950) 70%, transparent);
+    padding: 0.85rem 1rem;
+    font-size: 0.95rem;
+    color: var(--color-fg);
+    transition:
+      border-color 0.25s ease,
+      box-shadow 0.25s ease;
+  }
+
+  .field::placeholder {
+    color: var(--color-mist-500);
+  }
+
+  .field:focus {
+    outline: none;
+    border-color: color-mix(in oklab, var(--color-accent) 70%, transparent);
+    box-shadow: 0 0 0 4px color-mix(in oklab, var(--color-accent) 18%, transparent);
+  }
+
+  .field-label {
+    display: block;
+    margin-bottom: 0.45rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--color-mist-400);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .reveal {
+      opacity: 1;
+      transform: none;
+      transition: none;
+    }
+
+    .animate-float-slow,
+    .animate-float-soft,
+    .animate-marquee {
+      animation: none;
+    }
+  }
+}
+
+/* translate3d, а не translateY: гарантирует, что кадры считает видеокарта.
+   Размах увеличен — чем крупнее шаг за кадр, тем меньше заметно округление.
+   Поворот из float-soft убран: он заставлял перерисовывать картинку целиком. */
+@keyframes float-slow {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(0, -22px, 0);
+  }
+}
+
+@keyframes float-soft {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(0, -16px, 0);
+  }
+}
+
+@keyframes marquee {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
