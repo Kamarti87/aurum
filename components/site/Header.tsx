@@ -8,7 +8,8 @@ import { IconClock, IconMail, IconMapPin, IconPhone } from "@/components/ui/Icon
 const NAV = [
   { href: "#devices", label: "Кассы" },
   { href: "#fiscal", label: "Накопители" },
-  { href: "#onec", label: "Программы 1С" },
+  { href: "#onec", label: "1С" },
+  { href: "#its", label: "1С:ИТС" },
   { href: "#ecp", label: "Подпись" },
   { href: "#faq", label: "Вопросы" },
   { href: "#contact", label: "Контакты" },

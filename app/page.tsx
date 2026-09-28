@@ -7,6 +7,8 @@ import { OneC } from "@/components/site/OneC";
 import { Ecp } from "@/components/site/Ecp";
 import { Process } from "@/components/site/Process";
 import { Faq } from "@/components/site/Faq";
+import { Franchise } from "@/components/site/Franchise";
+import { Its } from "@/components/site/Its";
 import { Contact } from "@/components/site/Contact";
 import { MapSection } from "@/components/site/MapSection";
 import { Footer } from "@/components/site/Footer";
@@ -23,7 +25,9 @@ export default function Home() {
         <Devices />
         <Fiscal />
         <Process />
+        <Franchise />
         <OneC />
+        <Its />
         <Ecp />
         <Faq />
         <Contact />

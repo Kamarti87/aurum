@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { Logo } from "@/components/ui/Logo";
 import { ADDRESS, EMAIL, HOURS, LEGAL, MAX, PHONES } from "@/components/site/contacts";
 
@@ -5,6 +6,7 @@ const LINKS = [
   { href: "#devices", label: "Онлайн-кассы" },
   { href: "#fiscal", label: "Фискальные накопители" },
   { href: "#onec", label: "Программы 1С" },
+  { href: "#its", label: "Сопровождение 1С:ИТС" },
   { href: "#ecp", label: "Электронная подпись" },
   { href: "#faq", label: "Вопросы и ответы" },
   { href: "#map", label: "Как нас найти" },
@@ -41,6 +43,24 @@ export function Footer() {
             </p>
             <p className="mt-3 max-w-sm text-sm leading-relaxed text-mist-500">
               {ADDRESS.full}
+            </p>
+
+            {/* знак «1С» по гайдлайну — на светлой подложке и соразмерен нашему логотипу */}
+            <a
+              href="#franchise"
+              className="mt-7 inline-flex rounded-2xl border border-ink-600/60 bg-white px-5 py-4 transition-opacity hover:opacity-90"
+            >
+              <Image
+                src="/logo/1c-franchise.webp"
+                width={640}
+                height={383}
+                alt="1С:Франчайзинг"
+                sizes="180px"
+                className="h-auto w-[165px]"
+              />
+            </a>
+            <p className="mt-3 max-w-sm text-sm leading-relaxed text-mist-500">
+              Аурум имеет статус 1С:Франчайзинг и входит в партнёрскую сеть фирмы «1С».
             </p>
           </div>
 
@@ -117,6 +137,8 @@ export function Footer() {
           </p>
           <p>
             Цены на сайте не публикуются: стоимость рассчитывается индивидуально под задачу.
+            <br className="hidden sm:block" />
+            «1С», «1С:Предприятие», «1С:Франчайзинг» и «1С:ИТС» — товарные знаки АО «Группа 1С».
           </p>
         </div>
       </div>

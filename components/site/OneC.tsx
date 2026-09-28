@@ -12,6 +12,14 @@ function money(value: number) {
   return `${String(value).replace(/\B(?=(\d{3})+(?!\d))/g, " ")} ₽`;
 }
 
+/** Коротко о платформе — что получает покупатель любой программы 1С. */
+const PLATFORM = [
+  "Работа вдвоём и большой командой — от одной базы до клиент-серверной",
+  "Обмен данными между программами 1С и с сайтом или кассой",
+  "Доступ к базе через интернет и с мобильных устройств",
+  "Доработка под процессы компании без замены программы",
+];
+
 type Edition = { label: string; price: number };
 
 type Line = {
@@ -158,6 +166,37 @@ export function OneC() {
             </a>
           </Reveal>
         </div>
+
+        {/* что такое платформа: без этого карточки ниже — набор коробок */}
+        <Reveal delay={120}>
+          <div className="mt-12 grid gap-8 rounded-2xl border border-ink-600/60 bg-ink-850 px-6 py-7 lg:grid-cols-[0.9fr_1.1fr] lg:gap-12 lg:px-9 lg:py-8">
+            <div>
+              <h3 className="text-2xl font-semibold">Что такое 1С:Предприятие 8</h3>
+              <p className="mt-4 text-[15px] leading-relaxed text-mist-400">
+                Это система программ фирмы «1С» для учёта и управления. Она собрана из двух
+                частей: платформы и прикладных решений. Платформа — общий механизм, на котором
+                всё работает: формы, отчёты, права доступа, обмен данными. Прикладное решение,
+                или конфигурация, — это уже готовая программа для конкретной задачи:
+                бухгалтерии, зарплаты, магазина, склада.
+              </p>
+            </div>
+            <div>
+              <p className="text-[15px] leading-relaxed text-mist-400">
+                Отдельно платформу не покупают: она входит в поставку любой программы из списка
+                ниже. Отсюда и удобство — решения устроены одинаково, работают на одном движке
+                и обмениваются данными между собой.
+              </p>
+              <ul className="mt-5 grid gap-3 sm:grid-cols-2">
+                {PLATFORM.map((item) => (
+                  <li key={item} className="flex gap-3 text-sm leading-snug text-mist-300">
+                    <span className="mt-[9px] h-px w-3 shrink-0 bg-accent" />
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </Reveal>
 
         {/* линейки — горизонтальные карточки: коробка слева, описание и цены справа */}
         <div className="mt-14 grid gap-5 lg:grid-cols-2">
